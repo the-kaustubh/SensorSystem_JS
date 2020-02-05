@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trend</title>
+    <link rel="stylesheet" href="master.css">
+  </head>
+  <body>
+    <div id="toHide">
+      <input class="input" type="text" id="uid" placeholder="UID">
+      <input type="text" class="input" id="Username" placeholder="UserName">
+      <input type="submit" name="button" value="OK" onclick="chartIt()">
+    </div>
+    <div class="" style="position: relative; height:60vh; width:100vw">
+    <canvas id="chart" width="800" height="800"></canvas>
+    </div>
+    <script type="text/javascript">
+      HOST = "192.168.43.213";
+      document.getElementById('toHide').style.display = "display";
+    </script>
+    <script src="Chart.min.js" charset="utf-8"></script>
+    <script src="chartFunctions.js" charset="utf-8"></script>
+    <script src="chartData.js" charset="utf-8"></script>
+  </body>
+</html>

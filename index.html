@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configure Devices</title>
+    <link rel="stylesheet" href="config.css">
+    <script type="text/javascript">
+      const HOST = "192.168.43.213";
+      // const HOST = "localhost";
+      var username  = "kaustubh";
+    </script>
+  </head>
+  <body>
+    <div class="login-block operation" id="login-block">
+      <h2>Log In</h2>
+        <input type="email" id="mail" name="mail" value="" placeholder="E-mail">
+        <input type="password" id="pwd" name="pwd" value="" placeholder="Password">
+        <input type="submit" name="log" onclick="login()" value="LOG IN">
+    </div>
+    <div class="operation">
+      <h2>Configure</h2>
+      <input type="text" id="Uid" name="Uid" value="" placeholder="UID">
+      <button type="button" id="searchDevice" name="searchDevice" onclick="searchByUID()">Search Device</button>
+      <button type="button" id="trendDevice" name="trendDevice">Show Graph</button>
+      <input type="text" id="Loc" name="Loc" value="" placeholder="Location">
+      <input type="text" id="Model" name="Model" value="" placeholder="Model">
+      <input type="text" id="CMin" name="CMin" value="" placeholder="CO2 % Min">
+      <input type="text" id="CMax" name="CMax" value="" placeholder="CO2 % Max">
+      <input type="text" id="TMin" name="TMin" value="" placeholder="TEMP Min">
+      <input type="text" id="TMax" name="TMax" value="" placeholder="TEMP Max">
+      <button type="button" id="" name="addDevice" onclick="addDeviceHandle()">Add Device</button>
+      <button type="button" id="" name="modDevice" onclick="modDeviceHandle()">Modify Device</button>
+      <button type="button" id="" name="delDevice" onclick="delDeviceHandle()">Delete Device</button>
+    </div>
+    <script type="text/javascript">
+    function onload() {
+      document.querySelector("#login-block").style.display = "all";
+    }
+      function searchByUID() {
+        if (username == "") {
+          alert("You have to login first");
+          return;
+        }
+        let uid = document.querySelector('#Uid').value;
+        fetch('http://'+HOST+'/SensorsIOT/searchSensorJS.php',
+        {
+          method: 'post',
+          headers: {
+            "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+          },
+          body: 'user='+username+'&uid='+uid
+        })
+       .then(function(response) {
+          return response.json();
+        })
+        .then(function(text) {
+          console.log(text);
+          document.querySelector("#Loc").value = text[1];
+          document.querySelector("#CMin").value = text[2];
+          document.querySelector("#CMax").value = text[3];
+          document.querySelector("#TMin").value = text[4];
+          document.querySelector("#TMax").value = text[5];
+          document.querySelector("#Model").value = text[7];
+        })
+        .catch(function(error) {
+          console.log('Request failed', error)
+        });
+      }
+
+      function addDeviceHandle() {
+        if (username == "") {
+          alert("You have to login first");
+          return;
+        }
+        let uid = document.querySelector('#Uid').value;
+        let loc = document.querySelector('#Loc').value;
+        let mac = document.querySelector('#Model').value;
+        let cmin = document.querySelector('#CMin').value;
+        let cmax = document.querySelector('#CMax').value;
+        let tmin = document.querySelector('#TMin').value;
+        let tmax = document.querySelector('#TMax').value;
+        let reqBody = 'usr='+username;
+        reqBody += "&uid="+uid;
+        reqBody += "&loc="+loc;
+        reqBody += "&mac="+mac;
+        reqBody += "&cmin="+cmin;
+        reqBody += "&cmax="+cmax;
+        reqBody += "&tmin="+tmin;
+        reqBody += "&tmax="+tmax;
+
+        fetch('http://'+HOST+'/SensorsIOT/writeSensor.php',
+        {
+          method: 'post',
+          headers: {
+            "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+          },
+          body: reqBody
+        })
+       .then(function(response) {
+          return response.text();
+        })
+        .then(function(text) {
+          console.log(text);
+        })
+        .catch(function(error) {
+          console.log('Request failed', error)
+        });
+        document.querySelector('#Uid').value = '';
+        document.querySelector('#Loc').value = '';
+        document.querySelector('#Model').value = '';
+        document.querySelector('#CMin').value = '';
+        document.querySelector('#CMax').value = '';
+        document.querySelector('#TMin').value = '';
+        document.querySelector('#TMax').value = '';
+      }
+
+      function modDeviceHandle() {
+        if (username == "") {
+          alert("You have to login first");
+          return;
+        }
+        let uid = document.querySelector('#Uid').value;
+        let loc = document.querySelector('#Loc').value;
+        let mac = document.querySelector('#Model').value;
+        let cmin = document.querySelector('#CMin').value;
+        let cmax = document.querySelector('#CMax').value;
+        let tmin = document.querySelector('#TMin').value;
+        let tmax = document.querySelector('#TMax').value;
+        let reqBody = 'usr='+username;
+        reqBody += "&uid="+uid;
+        reqBody += "&loc="+loc;
+        reqBody += "&mac="+mac;
+        reqBody += "&cmin="+cmin;
+        reqBody += "&cmax="+cmax;
+        reqBody += "&tmin="+tmin;
+        reqBody += "&tmax="+tmax;
+
+        fetch('http://'+HOST+'/SensorsIOT/modifySensor.php',
+        {
+          method: 'post',
+          headers: {
+            "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+          },
+          body: reqBody
+        })
+       .then(function(response) {
+          return response.text();
+        })
+        .then(function(text) {
+          console.log(text);
+        })
+        .catch(function(error) {
+          console.log('Request failed', error)
+        });
+        document.querySelector('#Uid').value = '';
+        document.querySelector('#Loc').value = '';
+        document.querySelector('#Model').value = '';
+        document.querySelector('#CMin').value = '';
+        document.querySelector('#CMax').value = '';
+        document.querySelector('#TMin').value = '';
+        document.querySelector('#TMax').value = '';
+      }
+
+      function delDeviceHandle() {
+        if (username == "") {
+          alert("You have to login first");
+          return;
+        }
+        let uid = document.querySelector('#Uid').value;
+        let reqBody = 'user='+username;
+        reqBody += "&uid="+uid;
+
+        fetch('http://'+HOST+'/SensorsIOT/deleteSensor.php',
+        {
+          method: 'post',
+          headers: {
+            "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+          },
+          body: reqBody
+        })
+       .then(function(response) {
+          return response.text();
+        })
+        .then(function(text) {
+          console.log(text);
+        })
+        .catch(function(error) {
+          console.log('Request failed', error)
+        });
+        document.querySelector('#Uid').value = '';
+        document.querySelector('#Loc').value = '';
+        document.querySelector('#Model').value = '';
+        document.querySelector('#CMin').value = '';
+        document.querySelector('#CMax').value = '';
+        document.querySelector('#TMin').value = '';
+        document.querySelector('#TMax').value = '';
+      }
+      function login() {
+        let mail = document.querySelector('#mail').value;
+        let pwd  = document.querySelector('#pwd').value;
+        let reqBody = "mail="+mail+"&pwd="+pwd;
+
+        fetch('http://'+HOST+'/SensorsIOT/login.php',
+        {
+          method: 'post',
+          headers: {
+            "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+          },
+          body: reqBody
+        })
+       .then(function(response) {
+          return response.text();
+        })
+        .then(function(text) {
+          console.log(text);
+          if(text == "") {
+            alert("Invalid Credentials");
+          }
+          username = text;
+          document.querySelector("#login-block").style.display = "none";
+        })
+        .catch(function(error) {
+          console.log('Request failed', error)
+        });
+      }
+    </script>
+  </body>
+</html>
